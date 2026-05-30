@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Login - Wallet Live</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body
+        class="bg-zinc-950 text-zinc-100 min-h-screen flex items-center justify-center p-4 antialiased font-sans"
+    >
+        <main class="w-full max-w-md">
+            <div
+                class="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 shadow-2xl shadow-black/40"
+            >
+                <p
+                    class="text-xs font-semibold uppercase tracking-widest text-zinc-500 mb-2"
+                >
+                    Wallet Live
+                </p>
+                <h1 class="text-3xl font-extrabold tracking-tight mb-1">
+                    Sign in
+                </h1>
+                <p class="text-sm text-zinc-500 mb-8">
+                    Access your account with your username and password.
+                </p>
+
+                <p
+                    id="msg-err"
+                    class="hidden mb-4 px-4 py-3 rounded-xl bg-red-950 text-red-400 text-sm"
+                ></p>
+                <p
+                    id="msg-ok"
+                    class="hidden mb-4 px-4 py-3 rounded-xl bg-green-950 text-green-400 text-sm"
+                ></p>
+
+                <form method="post" action="/login" class="flex flex-col gap-4">
+                    <label
+                        class="flex flex-col gap-1.5 text-sm font-semibold text-zinc-200"
+                    >
+                        Username
+                        <input
+                            id="username"
+                            name="username"
+                            type="text"
+                            required
+                            class="bg-zinc-950 border border-zinc-700 rounded-xl px-4 py-3 text-sm text-zinc-100 font-normal focus:outline-none focus:border-zinc-500 transition-colors"
+                        />
+                    </label>
+                    <label
+                        class="flex flex-col gap-1.5 text-sm font-semibold text-zinc-200"
+                    >
+                        Password
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            required
+                            class="bg-zinc-950 border border-zinc-700 rounded-xl px-4 py-3 text-sm text-zinc-100 font-normal focus:outline-none focus:border-zinc-500 transition-colors"
+                        />
+                    </label>
+                    <button
+                        type="submit"
+                        class="mt-1 py-3 bg-zinc-100 text-zinc-950 font-bold rounded-xl hover:opacity-90 transition-opacity cursor-pointer"
+                    >
+                        Login
+                    </button>
+                </form>
+
+                <p class="mt-6 text-center text-sm text-zinc-500">
+                    No account yet?
+                    <a href="/register" class="text-zinc-100 hover:underline"
+                        >Create one</a
+                    >
+                </p>
+            </div>
+        </main>
+
+        <script>
+            var p = new URLSearchParams(window.location.search);
+            var err = document.getElementById("msg-err");
+            var ok = document.getElementById("msg-ok");
+            if (p.get("error") === "invalid_credentials") {
+                err.textContent = "Invalid username or password.";
+                err.classList.remove("hidden");
+            }
+            if (p.get("success") === "account_created") {
+                ok.textContent = "Account created. You can sign in now.";
+                ok.classList.remove("hidden");
+            }
+        </script>
+    </body>
+</html>

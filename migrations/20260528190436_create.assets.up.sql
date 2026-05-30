@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS assets (
+    id BIGSERIAL PRIMARY KEY NOT NULL,
+    name TEXT NOT NULL UNIQUE,
+    unit_value DOUBLE PRECISION NOT NULL
+)
+
+-- Add up migration script here

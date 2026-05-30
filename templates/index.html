@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Wallet Live</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body
+        class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col antialiased font-sans"
+    >
+        <!-- NAV -->
+        <nav
+            class="flex items-center justify-between px-8 py-4 border-b border-zinc-800"
+        >
+            <a
+                href="/"
+                class="flex items-center gap-2.5 font-bold text-lg tracking-tight text-zinc-100 no-underline"
+            >
+                <svg
+                    aria-hidden="true"
+                    class="text-violet-400"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <rect width="20" height="14" x="2" y="5" rx="2" />
+                    <path d="M16 10h2" />
+                    <path d="M2 10h6" />
+                </svg>
+                Wallet Live
+            </a>
+            <div class="flex items-center gap-2">
+                <a
+                    href="/login"
+                    class="px-4 py-2 text-sm font-semibold text-zinc-300 border border-zinc-800 rounded-xl hover:bg-zinc-900 transition-colors no-underline"
+                >
+                    Login
+                </a>
+                <a
+                    href="/register"
+                    class="px-4 py-2 text-sm font-bold bg-zinc-100 text-zinc-950 rounded-xl hover:opacity-90 transition-opacity no-underline"
+                >
+                    Get started
+                </a>
+            </div>
+        </nav>
+
+        <!-- HERO -->
+        <section
+            class="flex-1 flex flex-col items-center justify-center text-center px-6 py-24 gap-7"
+        >
+            <div
+                class="inline-flex items-center gap-2 border border-zinc-800 rounded-full px-4 py-1.5 text-xs text-zinc-500 tracking-widest uppercase"
+            >
+                <span class="w-1.5 h-1.5 rounded-full bg-violet-400"></span>
+                Simple &amp; fast asset tracking
+            </div>
+
+            <h1
+                class="text-5xl sm:text-6xl font-extrabold tracking-tight leading-tight max-w-2xl"
+            >
+                Manage your<br />
+                <span class="text-violet-400">assets in real time</span>
+            </h1>
+
+            <p class="text-zinc-400 text-lg max-w-md leading-relaxed">
+                Wallet Live gives you a single place to track, update, and
+                monitor the value of all your assets with zero friction.
+            </p>
+
+            <div class="flex items-center gap-3 flex-wrap justify-center">
+                <a
+                    href="/register"
+                    class="px-7 py-3 font-bold bg-zinc-100 text-zinc-950 rounded-xl hover:opacity-90 transition-opacity no-underline"
+                >
+                    Create free account
+                </a>
+                <a
+                    href="/login"
+                    class="px-7 py-3 font-semibold text-zinc-100 border border-zinc-700 rounded-xl hover:bg-zinc-900 transition-colors no-underline"
+                >
+                    Sign in
+                </a>
+            </div>
+        </section>
+
+        <!-- FEATURES -->
+        <div
+            class="border-t border-b border-zinc-800 flex flex-col sm:flex-row"
+        >
+            <div
+                class="flex-1 flex items-start gap-4 p-8 border-b sm:border-b-0 sm:border-r border-zinc-800"
+            >
+                <div
+                    class="shrink-0 w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-violet-400"
+                >
+                    <svg
+                        aria-hidden="true"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
+                        <polyline points="16 7 22 7 22 13" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="font-bold text-zinc-100 mb-1">
+                        Real-time values
+                    </h3>
+                    <p class="text-sm text-zinc-500 leading-relaxed">
+                        Keep unit values up to date across all your assets
+                        instantly.
+                    </p>
+                </div>
+            </div>
+            <div
+                class="flex-1 flex items-start gap-4 p-8 border-b sm:border-b-0 sm:border-r border-zinc-800"
+            >
+                <div
+                    class="shrink-0 w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-violet-400"
+                >
+                    <svg
+                        aria-hidden="true"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <rect x="3" y="11" width="18" height="11" rx="2" />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="font-bold text-zinc-100 mb-1">
+                        Secure by default
+                    </h3>
+                    <p class="text-sm text-zinc-500 leading-relaxed">
+                        Every request is authenticated behind JWT-protected
+                        endpoints.
+                    </p>
+                </div>
+            </div>
+            <div class="flex-1 flex items-start gap-4 p-8">
+                <div
+                    class="shrink-0 w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-violet-400"
+                >
+                    <svg
+                        aria-hidden="true"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <circle cx="12" cy="12" r="3" />
+                        <path
+                            d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M18.36 5.64l1.41-1.41"
+                        />
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="font-bold text-zinc-100 mb-1">
+                        Minimal &amp; fast
+                    </h3>
+                    <p class="text-sm text-zinc-500 leading-relaxed">
+                        Built on Axum and SQLx — lightweight, async, blazingly
+                        fast.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer
+            class="py-6 border-t border-zinc-800 text-center text-zinc-600 text-sm"
+        >
+            &copy; 2026 Wallet Live
+        </footer>
+    </body>
+</html>

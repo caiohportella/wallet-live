@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Dashboard - Wallet Live</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            /* Table-row toggle — no Tailwind equivalent for display:table-row */
+            .hr {
+                display: none;
+            }
+            .hr.show {
+                display: table-row;
+            }
+            /* Chevron rotation on open row */
+            .arow.open .ch {
+                transform: rotate(90deg);
+            }
+            /* Compact coloured badges */
+            .bp {
+                display: inline-flex;
+                padding: 2px 8px;
+                border-radius: 4px;
+                font-size: 0.75rem;
+                font-weight: 600;
+                background: #052e16;
+                color: #4ade80;
+            }
+            .bn {
+                display: inline-flex;
+                padding: 2px 8px;
+                border-radius: 4px;
+                font-size: 0.75rem;
+                font-weight: 600;
+                background: #450a0a;
+                color: #f87171;
+            }
+        </style>
+    </head>
+    <body
+        class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col antialiased font-sans"
+    >
+        <!-- NAV -->
+        <nav
+            class="sticky top-0 z-10 bg-zinc-950 border-b border-zinc-800 flex items-center justify-between px-8 py-4"
+        >
+            <a
+                href="/"
+                class="flex items-center gap-2.5 font-bold tracking-tight text-zinc-100 no-underline"
+            >
+                <svg
+                    aria-hidden="true"
+                    class="text-violet-400"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <rect width="20" height="14" x="2" y="5" rx="2" />
+                    <path d="M16 10h2" />
+                    <path d="M2 10h6" />
+                </svg>
+                Wallet Live
+            </a>
+            <div class="flex items-center gap-4">
+                <span class="flex items-center gap-1.5 text-sm text-zinc-500">
+                    <svg
+                        aria-hidden="true"
+                        width="15"
+                        height="15"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <circle cx="12" cy="8" r="4" />
+                        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+                    </svg>
+                    {{ username }}
+                </span>
+                <a
+                    href="/logout"
+                    class="px-4 py-1.5 text-sm font-semibold border border-zinc-800 rounded-xl hover:bg-zinc-900 transition-colors no-underline"
+                >
+                    Logout
+                </a>
+            </div>
+        </nav>
+
+        <!-- MAIN -->
+        <main class="flex-1 max-w-5xl mx-auto w-full px-8 py-10">
+            <div class="mb-8">
+                <h1 class="text-2xl font-extrabold tracking-tight">
+                    Portfolio
+                </h1>
+                <p class="text-sm text-zinc-500 mt-1">
+                    Your owned assets and purchase history.
+                </p>
+            </div>
+
+            <div
+                class="rounded-2xl border border-zinc-800 overflow-hidden bg-zinc-900"
+            >
+                <div
+                    class="flex items-center justify-between px-6 py-4 border-b border-zinc-800"
+                >
+                    <span
+                        class="text-xs font-bold uppercase tracking-widest text-zinc-400"
+                        >Assets</span
+                    >
+                    <div class="flex items-center gap-4">
+                        <span class="text-xs text-zinc-600"
+                            >Click a row to expand history</span
+                        >
+                        <button
+                            type="button"
+                            onclick="openModal()"
+                            class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-zinc-100 text-zinc-950 rounded-lg hover:opacity-90 transition-opacity"
+                        >
+                            <svg
+                                aria-hidden="true"
+                                width="12"
+                                height="12"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="3"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <path d="M12 5v14M5 12h14" />
+                            </svg>
+                            Register Purchase
+                        </button>
+                    </div>
+                </div>
+
+                {% if has_owned_assets %}
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr>
+                            <th
+                                class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500 border-b border-zinc-800"
+                            >
+                                Asset
+                            </th>
+                            <th
+                                class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-zinc-500 border-b border-zinc-800"
+                            >
+                                Quantity
+                            </th>
+                            <th
+                                class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-zinc-500 border-b border-zinc-800"
+                            >
+                                Unit Value
+                            </th>
+                            <th
+                                class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-zinc-500 border-b border-zinc-800"
+                            >
+                                Change
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for asset in owned_assets %}
+                        <tr
+                            class="arow cursor-pointer border-b border-zinc-800 hover:bg-zinc-800/50 transition-colors"
+                            id="row-{{ asset.id }}"
+                            data-id="{{ asset.id }}"
+                        >
+                            <td class="px-6 py-4 font-semibold">
+                                <span class="flex items-center gap-2">
+                                    <svg
+                                        aria-hidden="true"
+                                        class="ch text-zinc-600 transition-transform duration-200 shrink-0"
+                                        width="14"
+                                        height="14"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2.5"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <polyline points="9 18 15 12 9 6" />
+                                    </svg>
+                                    {{ asset.name }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-right text-zinc-300">
+                                {{ asset.qty }}
+                            </td>
+                            <td class="px-6 py-4 text-right text-zinc-300">
+                                {{ asset.price }}
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                {% if asset.positive %}
+                                <span class="bp">+{{ asset.delta }}</span>
+                                {% else %}
+                                <span class="bn">-{{ asset.delta }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr class="hr" id="hist-{{ asset.id }}">
+                            <td
+                                colspan="4"
+                                class="bg-zinc-950 border-b border-zinc-800 p-0"
+                            >
+                                <div class="px-14 py-5">
+                                    <p
+                                        class="text-xs font-bold uppercase tracking-widest text-zinc-600 mb-4"
+                                    >
+                                        Purchase History
+                                    </p>
+                                    {% if asset.has_history %}
+                                    <table class="w-full border-collapse">
+                                        <thead>
+                                            <tr>
+                                                <th
+                                                    class="pb-2 text-left text-xs font-semibold uppercase tracking-wider text-zinc-600 border-b border-zinc-800"
+                                                >
+                                                    Date
+                                                </th>
+                                                <th
+                                                    class="pb-2 text-right text-xs font-semibold uppercase tracking-wider text-zinc-600 border-b border-zinc-800"
+                                                >
+                                                    Bought For
+                                                </th>
+                                                <th
+                                                    class="pb-2 text-right text-xs font-semibold uppercase tracking-wider text-zinc-600 border-b border-zinc-800"
+                                                >
+                                                    Quantity
+                                                </th>
+                                                <th
+                                                    class="pb-2 text-right text-xs font-semibold uppercase tracking-wider text-zinc-600 border-b border-zinc-800"
+                                                >
+                                                    Change
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for p in asset.history %}
+                                            <tr
+                                                class="border-b border-zinc-800/50 last:border-0"
+                                            >
+                                                <td
+                                                    class="py-2.5 text-sm text-zinc-400"
+                                                >
+                                                    {{ p.date }}
+                                                </td>
+                                                <td
+                                                    class="py-2.5 text-right text-sm text-zinc-400"
+                                                >
+                                                    {{ p.price }}
+                                                </td>
+                                                <td
+                                                    class="py-2.5 text-right text-sm text-zinc-400"
+                                                >
+                                                    {{ p.qty }}
+                                                </td>
+                                                <td class="py-2.5 text-right">
+                                                    {% if p.positive %}
+                                                    <span class="bp"
+                                                        >+{{ p.delta }}</span
+                                                    >
+                                                    {% else %}
+                                                    <span class="bn"
+                                                        >-{{ p.delta }}</span
+                                                    >
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    {% else %}
+                                    <p class="text-sm text-zinc-600">
+                                        No purchases recorded.
+                                    </p>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div
+                    class="flex flex-col items-center gap-3 py-20 text-zinc-700"
+                >
+                    <svg
+                        aria-hidden="true"
+                        width="40"
+                        height="40"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <rect width="20" height="14" x="2" y="5" rx="2" />
+                        <path d="M16 10h2" />
+                        <path d="M2 10h6" />
+                    </svg>
+                    <p class="text-sm">No assets in your portfolio yet.</p>
+                </div>
+                {% endif %}
+            </div>
+        </main>
+
+        <!-- Purchase Modal -->
+        <div
+            id="modal-backdrop"
+            class="hidden fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4"
+        >
+            <div
+                id="modal"
+                class="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-2xl p-8 shadow-2xl"
+            >
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-lg font-bold tracking-tight">
+                        Register Purchase
+                    </h2>
+                    <button
+                        type="button"
+                        onclick="closeModal()"
+                        class="text-zinc-500 hover:text-zinc-300 transition-colors"
+                    >
+                        <svg
+                            aria-label="Close"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="M18 6 6 18M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <form
+                    method="post"
+                    action="/dashboard"
+                    class="flex flex-col gap-4"
+                >
+                    <label
+                        class="flex flex-col gap-1.5 text-sm font-semibold text-zinc-200"
+                    >
+                        Asset
+                        <select
+                            name="asset_id"
+                            required
+                            class="bg-zinc-950 border border-zinc-700 rounded-xl px-4 py-3 text-sm text-zinc-100 focus:outline-none focus:border-zinc-500 transition-colors"
+                        >
+                            {% if has_available_assets %} {% for asset in
+                            available_assets %}
+                            <option value="{{ asset.id }}">
+                                {{ asset.name }}
+                            </option>
+                            {% endfor %} {% else %}
+                            <option disabled selected>
+                                No assets available
+                            </option>
+                            {% endif %}
+                        </select>
+                    </label>
+
+                    <label
+                        class="flex flex-col gap-1.5 text-sm font-semibold text-zinc-200"
+                    >
+                        Unit Value
+                        <input
+                            type="number"
+                            name="unity_value"
+                            step="0.01"
+                            min="0"
+                            required
+                            placeholder="0.00"
+                            class="bg-zinc-950 border border-zinc-700 rounded-xl px-4 py-3 text-sm text-zinc-100 font-normal focus:outline-none focus:border-zinc-500 transition-colors"
+                        />
+                    </label>
+
+                    <label
+                        class="flex flex-col gap-1.5 text-sm font-semibold text-zinc-200"
+                    >
+                        Quantity
+                        <input
+                            type="number"
+                            name="quantity"
+                            step="0.0001"
+                            min="0"
+                            required
+                            placeholder="0.0000"
+                            class="bg-zinc-950 border border-zinc-700 rounded-xl px-4 py-3 text-sm text-zinc-100 font-normal focus:outline-none focus:border-zinc-500 transition-colors"
+                        />
+                    </label>
+
+                    <div class="flex gap-3 mt-2">
+                        <button
+                            type="button"
+                            onclick="closeModal()"
+                            class="flex-1 py-3 border border-zinc-700 text-zinc-400 font-semibold rounded-xl hover:bg-zinc-800 transition-colors"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            class="flex-1 py-3 bg-zinc-100 text-zinc-950 font-bold rounded-xl hover:opacity-90 transition-opacity"
+                        >
+                            Confirm
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            function toggle(id) {
+                var hr = document.getElementById("hist-" + id);
+                var row = document.getElementById("row-" + id);
+                var open = hr.classList.contains("show");
+                hr.classList.toggle("show", !open);
+                row.classList.toggle("open", !open);
+            }
+            document.querySelectorAll(".arow").forEach(function (r) {
+                r.addEventListener("click", function () {
+                    toggle(r.dataset.id);
+                });
+            });
+
+            function openModal() {
+                document
+                    .getElementById("modal-backdrop")
+                    .classList.remove("hidden");
+            }
+            function closeModal() {
+                document
+                    .getElementById("modal-backdrop")
+                    .classList.add("hidden");
+            }
+            document
+                .getElementById("modal-backdrop")
+                .addEventListener("click", function (e) {
+                    if (e.target === this) closeModal();
+                });
+            document.addEventListener("keydown", function (e) {
+                if (e.key === "Escape") closeModal();
+            });
+        </script>
+    </body>
+</html>
